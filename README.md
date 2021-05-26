@@ -12,7 +12,7 @@
 
 ## 코드 수정
 
-1. common/layer.py
+1. common/layer.py  
 1.1 add "import cupyx" in the first line:
 ```
 import cupyx # ERROE Corrected 
