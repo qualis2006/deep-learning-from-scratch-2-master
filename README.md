@@ -14,12 +14,14 @@
 
 1. common/layer.py
 1.1 add "import cupyx" in the first line:
+```
 import cupyx # ERROE Corrected 
 from common.np import *  # import numpy as np
 from common.config import GPU
 from common.functions import softmax, cross_entropy_error
-
+````
 1.2 GPU-related code corrected in the class Eembedding:
+```
 class Embedding:
     def __init__(self, W):
         self.params = [W]
@@ -40,9 +42,10 @@ class Embedding:
         else:    # ERROR Corrected                        
             np.add.at(dW, self.idx, dout)        
         return None
-
+```
 2. common/np.py 
 2.1 comment out the "np.add.at"
+```
 from common.config import GPU
 
 if GPU:
@@ -56,7 +59,7 @@ if GPU:
     print('\033[92m' + '-' * 60 + '\033[0m\n')
 else:
     import numpy as np
-
+```
 
 ## 시리즈 소개
 
