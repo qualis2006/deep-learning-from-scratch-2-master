@@ -12,7 +12,7 @@
 
 ## 코드 수정
 
-1. common/layer.py  
+1. common/layer.py </br>
 1.1 add "import cupyx" in the first line:
 ```
 import cupyx # ERROE Corrected 
@@ -43,7 +43,7 @@ class Embedding:
             np.add.at(dW, self.idx, dout)        
         return None
 ```
-2. common/np.py 
+2. common/np.py </br>
 2.1 comment out the "np.add.at"
 ```
 from common.config import GPU
