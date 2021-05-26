@@ -10,6 +10,54 @@
 
 ---
 
+## 코드 수정
+
+1. common/layer.py
+1.1 add "import cupyx" in the first line:
+import cupyx # ERROE Corrected 
+from common.np import *  # import numpy as np
+from common.config import GPU
+from common.functions import softmax, cross_entropy_error
+
+1.2 GPU-related code corrected in the class Eembedding:
+class Embedding:
+    def __init__(self, W):
+        self.params = [W]
+        self.grads = [np.zeros_like(W)]
+        self.idx = None
+
+    def forward(self, idx):
+        W, = self.params
+        self.idx = idx
+        out = W[idx]
+        return out
+
+    def backward(self, dout):
+        dW, = self.grads
+        dW[...] = 0
+        if GPU:  # ERROR Corrected
+            cupyx.scatter_add(dW, self.idx, dout) # ERROR Corrected
+        else:    # ERROR Corrected                        
+            np.add.at(dW, self.idx, dout)        
+        return None
+
+2. common/np.py 
+2.1 comment out the "np.add.at"
+from common.config import GPU
+
+if GPU:
+    import cupy as np
+    np.cuda.set_allocator(np.cuda.MemoryPool().malloc)
+    #np.add.at = np.scatter_add  # ERROR Corrected
+    #np.add.at = cupyx.scatter_add
+    
+    print('\033[92m' + '-' * 60 + '\033[0m')
+    print(' ' * 23 + '\033[92mGPU Mode (cupy)\033[0m')
+    print('\033[92m' + '-' * 60 + '\033[0m\n')
+else:
+    import numpy as np
+
+
 ## 시리즈 소개
 
 <a href="https://github.com/WegraLee/deep-learning-from-scratch-3/blob/master/%EB%B0%91%EB%B0%94%EB%8B%A5%20%EC%8B%9C%EB%A6%AC%EC%A6%88%20%EC%86%8C%EA%B0%9C.pdf"><img src="https://github.com/WegraLee/deep-learning-from-scratch-3/blob/master/%EB%B0%91%EB%B0%94%EB%8B%A5%20%EC%8B%9C%EB%A6%AC%EC%A6%88%20%EC%86%8C%EA%B0%9C.png" width=1000></a>
